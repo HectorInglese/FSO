@@ -1,9 +1,17 @@
-import React from 'react'
+import PropTypes from 'prop-types';
 
-const Content = () => {
+const Content = ({ parts }) => {
     return (
-        <div>Content</div>
+        <div>
+            {parts.map((part) => (
+                <p key={part.id}>
+                    {part.name} {part.exercises}
+                </p>
+            ))}
+        </div>
     )
-}
-
-export default Content
+};
+Content.propTypes = {
+    parts: PropTypes.array
+};
+export default Content;

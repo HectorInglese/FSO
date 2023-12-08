@@ -1,9 +1,19 @@
-import React from 'react'
+import PropTypes from 'prop-types';
 
-const Total = () => {
+const Total = ({ parts }) => {
+
+    const totalExercises = parts.reduce((sum, part) => sum + part.exercises, 0);
+
     return (
-        <div>Total</div>
-    )
-}
+        <div>
+            <p>
+                Number of exercises {totalExercises}
+            </p>
+        </div>
+    );
+};
 
-export default Total
+Total.propTypes = {
+    parts: PropTypes.array
+};
+export default Total;
