@@ -49,7 +49,7 @@ const App = () => {
       <button onClick={() => setSelected(getRandomInt())}>next anecdote</button>
       <br />
       <h2>Anecdotes with most votes</h2>
-      <p>{topAnecdote ? topAnecdote : ''}</p>
+      <p>{topAnecdote ? <>{topAnecdote} <br /> has {votes[anecdotes.indexOf(topAnecdote)]} votes </> : `No votes yet`}</p>
     </div>
   )
 };
