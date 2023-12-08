@@ -1,0 +1,11 @@
+table{
+    margin-top: 15px;
+}
+
+th,
+tr,
+td {
+    border: 2px solid black;
+    text-align: center;
+    padding: 15px;
+};
