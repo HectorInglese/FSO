@@ -1,8 +1,9 @@
-import { useState } from 'react'
-import './app.css'
+import { useState } from 'react';
+import './app.css';
 import PersonForm from './components/PersonForm';
 import PersonsGrid from './components/PersonsGrid';
 import QueryFilter from './components/QueryFilter';
+
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456', id: 1 },
