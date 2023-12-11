@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import './app.css'
+import PersonForm from './components/PersonForm';
+import PersonsGrid from './components/PersonsGrid';
+import QueryFilter from './components/QueryFilter';
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: '040-123456', id: 1 },
@@ -37,45 +40,15 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      filter shown with
-      <input
-        onChange={(event) => handleFilterChange(event)}
+      <QueryFilter handleFilterChange={handleFilterChange} />
+      <PersonForm
+        handleSubmit={handleSubmit}
+        newName={newName}
+        handleNameChange={handleNameChange}
+        newNumber={newNumber}
+        handleNumberChange={handleNumberChange}
       />
-      <h3>Add a new</h3>
-      <form onSubmit={(event) => handleSubmit(event)}>
-        <div>
-          name: <input
-            required
-            value={newName}
-            onChange={(event) => handleNameChange(event)}
-          />
-          <br />
-          phone:
-          <input
-            required
-            value={newNumber}
-            onChange={(event) => handleNumberChange(event)}
-            type='tel'
-          />
-        </div>
-        <br />
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <table>
-        <th colSpan="2">Numbers</th>
-        <tr>
-          <th>Name</th>
-          <th>Number</th>
-        </tr>
-        {handlePersonsFilter().map((person) => (
-          <tr key={person.id}>
-            <td>{person.name}</td>
-            <td>{person.number}</td>
-          </tr>
-        ))}
-      </table>
+      <PersonsGrid handlePersonsFilter={handlePersonsFilter} />
     </div>
   );
 };
