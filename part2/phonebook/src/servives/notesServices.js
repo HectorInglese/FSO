@@ -13,3 +13,7 @@ export const deletePerson = async (id) => {
     const response = await axios.delete(`${baseUrl}/persons/${id}`);
     return response.data;
 };
+export const updatePerson = async (person) => {
+    const response = await axios.put(`${baseUrl}/persons/${person.id}`, person);
+    return (response.data);
+};

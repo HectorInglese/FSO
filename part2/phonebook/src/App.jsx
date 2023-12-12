@@ -3,7 +3,7 @@ import './app.css';
 import PersonForm from './components/PersonForm';
 import PersonsGrid from './components/PersonsGrid';
 import QueryFilter from './components/QueryFilter';
-import { deletePerson, getPersons, postPerson } from './servives/notesServices';
+import { deletePerson, getPersons, postPerson, updatePerson } from './servives/notesServices';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -31,10 +31,10 @@ const App = () => {
       return
     }
     if (persons.some(person => person.name === newName.trim())) {
-      alert(`${newName.trim()} is already added to phonebook`)
+      handlePersonUpdate();
       setNewName('');
       setNewNumber('');
-      return
+      return;
     }
     const newPerson = {
       name: newName.trim(),
@@ -55,6 +55,19 @@ const App = () => {
     return;
   };
 
+  const handlePersonUpdate = async () => {
+    if (confirm(`${newName.trim()} is already added to phonebook, replace the old number with a new one?`)) {
+      const personId = persons.find(person => person.name === newName.trim()).id;
+      const updatedPerson = {
+        name: newName.trim(),
+        number: newNumber.trim(),
+        id: personId
+      };
+      updatePerson(updatedPerson).then(person => {
+        setPersons(persons.map(p => p.id === personId ? person : p))
+      })
+    }
+  }
   useEffect(() => {
     getPersons().then(persons => setPersons(persons));
   }, []);
