@@ -3,13 +3,25 @@ import './app.css';
 import PersonForm from './components/PersonForm';
 import PersonsGrid from './components/PersonsGrid';
 import QueryFilter from './components/QueryFilter';
-import { getPersons, postPerson } from './servives/notesServices';
+import { deletePerson, getPersons, postPerson } from './servives/notesServices';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filter, setFilter] = useState('');
+  const handleNameChange = (event) => {
+    setNewName(event.target.value);
+  };
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value);
+  };
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  };
+  const handlePersonsFilter = () => {
+    return persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
+  };
   const handleSubmit = (event) => {
     event.preventDefault()
     if (!newName.trim() || !newNumber.trim()) {
@@ -29,23 +41,18 @@ const App = () => {
       number: newNumber.trim(),
       id: persons.length + 1
     };
-
-    postPerson(newPerson).then(person => setPersons(persons.concat(person)));
+    postPerson(newPerson).then(person => { setPersons(persons.concat(person)) });
     setNewName('');
     setNewNumber('');
   };
-
-  const handleNameChange = (event) => {
-    setNewName(event.target.value);
-  };
-  const handleNumberChange = (event) => {
-    setNewNumber(event.target.value);
-  };
-  const handleFilterChange = (event) => {
-    setFilter(event.target.value);
-  };
-  const handlePersonsFilter = () => {
-    return persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
+  const handlePersonDelete = (id) => {
+    if (confirm(`Delete ${persons.find(person => person.id === id).name}?`)) {
+      deletePerson(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id));
+        });
+    }
+    return;
   };
 
   useEffect(() => {
@@ -63,7 +70,7 @@ const App = () => {
         newNumber={newNumber}
         handleNumberChange={handleNumberChange}
       />
-      <PersonsGrid handlePersonsFilter={handlePersonsFilter} />
+      <PersonsGrid handlePersonsFilter={handlePersonsFilter} handlePersonDelete={handlePersonDelete} />
     </div>
   );
 };
