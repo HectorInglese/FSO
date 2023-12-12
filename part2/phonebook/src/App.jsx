@@ -4,12 +4,15 @@ import PersonForm from './components/PersonForm';
 import PersonsGrid from './components/PersonsGrid';
 import QueryFilter from './components/QueryFilter';
 import { deletePerson, getPersons, postPerson, updatePerson } from './servives/notesServices';
+import ErrorComponent from './components/Notification';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filter, setFilter] = useState('');
+  const [notificationMessage, setNotificationMessage] = useState(null);
+
   const handleNameChange = (event) => {
     setNewName(event.target.value);
   };
@@ -31,7 +34,10 @@ const App = () => {
       return
     }
     if (persons.some(person => person.name === newName.trim())) {
-      handlePersonUpdate();
+      handlePersonUpdate()
+        .catch(() => {
+          setNotificationMessage(`Information of ${newName.trim()} has already been removed from server`)
+        })
       setNewName('');
       setNewNumber('');
       return;
@@ -39,9 +45,19 @@ const App = () => {
     const newPerson = {
       name: newName.trim(),
       number: newNumber.trim(),
-      id: persons.length + 1
+      id: persons.length + Math.floor(Math.random() * 1000) + 1
     };
-    postPerson(newPerson).then(person => { setPersons(persons.concat(person)) });
+    postPerson(newPerson)
+      .catch(() => {
+        setNotificationMessage(`Information of ${newName.trim()} has already been removed from server`)
+      })
+      .then(person => {
+        setPersons(persons.concat(person))
+        setNotificationMessage(`Successfully Added ${newName.trim()}`)
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 5000)
+      });
     setNewName('');
     setNewNumber('');
   };
@@ -50,6 +66,10 @@ const App = () => {
       deletePerson(id)
         .then(() => {
           setPersons(persons.filter(person => person.id !== id));
+          setNotificationMessage(`Successfully Deleted ${persons.find(person => person.id === id).name}`)
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000)
         });
     }
     return;
@@ -65,16 +85,21 @@ const App = () => {
       };
       updatePerson(updatedPerson).then(person => {
         setPersons(persons.map(p => p.id === personId ? person : p))
+        setNotificationMessage(`Successfully Updated ${newName.trim()}`)
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 5000)
       })
     }
   }
   useEffect(() => {
-    getPersons().then(persons => setPersons(persons));
+    getPersons().then(persons => { setPersons(persons) });
   }, []);
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <ErrorComponent message={notificationMessage} />
       <QueryFilter handleFilterChange={handleFilterChange} />
       <PersonForm
         handleSubmit={handleSubmit}
