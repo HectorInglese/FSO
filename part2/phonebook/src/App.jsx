@@ -3,7 +3,7 @@ import './app.css';
 import PersonForm from './components/PersonForm';
 import PersonsGrid from './components/PersonsGrid';
 import QueryFilter from './components/QueryFilter';
-import axios from 'axios';
+import { getPersons, postPerson } from './servives/notesServices';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -12,11 +12,25 @@ const App = () => {
   const [filter, setFilter] = useState('');
   const handleSubmit = (event) => {
     event.preventDefault()
-    if (persons.some(person => person.name === newName.trim())) {
-      alert(`${newName.trim()} is already added to phonebook`)
+    if (!newName.trim() || !newNumber.trim()) {
+      alert('Please enter a name and a number')
+      setNewName('');
+      setNewNumber('');
       return
     }
-    setPersons(persons.concat({ name: newName.trim(), number: newNumber.trim(), id: persons.length + 1 }));
+    if (persons.some(person => person.name === newName.trim())) {
+      alert(`${newName.trim()} is already added to phonebook`)
+      setNewName('');
+      setNewNumber('');
+      return
+    }
+    const newPerson = {
+      name: newName.trim(),
+      number: newNumber.trim(),
+      id: persons.length + 1
+    };
+
+    postPerson(newPerson).then(person => setPersons(persons.concat(person)));
     setNewName('');
     setNewNumber('');
   };
@@ -26,7 +40,7 @@ const App = () => {
   };
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value);
-  }
+  };
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
   };
@@ -35,12 +49,8 @@ const App = () => {
   };
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-      })
-  }, [])
+    getPersons().then(persons => setPersons(persons));
+  }, []);
 
   return (
     <div>
