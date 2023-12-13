@@ -4,13 +4,13 @@ import PersonForm from './components/PersonForm';
 import PersonsGrid from './components/PersonsGrid';
 import QueryFilter from './components/QueryFilter';
 import { deletePerson, getPersons, postPerson, updatePerson } from './servives/notesServices';
-import ErrorComponent from './components/Notification';
+import Notification from './components/Notification';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-  const [newName, setNewName] = useState('');
-  const [newNumber, setNewNumber] = useState('');
-  const [filter, setFilter] = useState('');
+  const [newName, setNewName] = useState(null);
+  const [newNumber, setNewNumber] = useState(null);
+  const [filter, setFilter] = useState(null);
   const [notificationMessage, setNotificationMessage] = useState(null);
 
   const handleNameChange = (event) => {
@@ -103,7 +103,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <ErrorComponent message={notificationMessage} />
+      <Notification message={notificationMessage} />
       <QueryFilter handleFilterChange={handleFilterChange} />
       <PersonForm
         handleSubmit={handleSubmit}

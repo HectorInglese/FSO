@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 const PersonsGrid = ({ handlePersonsFilter, handlePersonDelete }) => {
 
-    if (handlePersonsFilter().length === 0) {
+    if (handlePersonsFilter().length === 0 || handlePersonsFilter() === null) {
         return (
             <p>No persons in the phonebook</p>
         );
