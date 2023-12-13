@@ -61,7 +61,7 @@ const App = () => {
       deletePerson(id)
         .then((person) => {
           if (person.status == 404) {
-            displayNotification(`Information of ${personName} has already been removed from server`)
+            displayNotification(`Error : Information of ${personName} has already been removed from server`)
             getPersons().then(persons => { setPersons(persons) });
             return
           }
@@ -82,7 +82,7 @@ const App = () => {
       updatePerson(updatedPerson)
         .then(person => {
           if (person.status == 404) {
-            displayNotification(`Information of ${newName.trim()} has already been removed from server`)
+            displayNotification(`Error : Information of ${newName.trim()} has already been removed from server`)
             getPersons().then(persons => { setPersons(persons) });
             return
           }

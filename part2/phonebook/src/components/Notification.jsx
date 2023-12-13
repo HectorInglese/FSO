@@ -4,11 +4,17 @@ const Notification = ({ message }) => {
     if (message === null) {
         return null
     }
+
+    const style = {
+        color: message.split(' ').includes('Error') ? 'red' : 'green',
+    }
+
     return (
         <div
             id="notification"
+            style={style}
         >
-            <p>{message}</p>
+            {message}
         </div>
     );
 };
