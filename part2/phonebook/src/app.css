@@ -24,4 +24,5 @@ td {
     top: 1%;
     display: flex;
     align-items: center;
+    justify-items: start;
 }

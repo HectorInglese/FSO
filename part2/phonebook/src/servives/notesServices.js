@@ -6,14 +6,21 @@ export const getPersons = async () => {
 };
 export const postPerson = async (person) => {
     const response = await axios.post(`${baseUrl}/persons`, person);
-    console.log(response);
     return response.data;
 };
 export const deletePerson = async (id) => {
-    const response = await axios.delete(`${baseUrl}/persons/${id}`);
-    return response.data;
+    try {
+        const response = await axios.delete(`${baseUrl}/persons/${id}`);
+        return response.data;
+    } catch (error) {
+        return (error.response);
+    }
 };
 export const updatePerson = async (person) => {
-    const response = await axios.put(`${baseUrl}/persons/${person.id}`, person);
-    return (response.data);
+    try {
+        const response = await axios.put(`${baseUrl}/persons/${person.id}`, person);
+        return response.data;
+    } catch (error) {
+        return (error.response);
+    }
 };

@@ -1,6 +1,13 @@
 import PropTypes from 'prop-types';
 
 const PersonsGrid = ({ handlePersonsFilter, handlePersonDelete }) => {
+
+    if (handlePersonsFilter().length === 0) {
+        return (
+            <p>No persons in the phonebook</p>
+        );
+    }
+
     return (
         <table>
             <th colSpan="3">Numbers</th>

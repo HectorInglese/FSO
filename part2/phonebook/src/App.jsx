@@ -45,36 +45,32 @@ const App = () => {
     const newPerson = {
       name: newName.trim(),
       number: newNumber.trim(),
-      id: persons.length + Math.floor(Math.random() * 1000) + 1
+      id: persons.length + 1
     };
     postPerson(newPerson)
-      .catch(() => {
-        setNotificationMessage(`Information of ${newName.trim()} has already been removed from server`)
-      })
       .then(person => {
         setPersons(persons.concat(person))
-        setNotificationMessage(`Successfully Added ${newName.trim()}`)
-        setTimeout(() => {
-          setNotificationMessage(null)
-        }, 5000)
+        displayNotification(`Successfully Added ${newName.trim()}`)
       });
     setNewName('');
     setNewNumber('');
   };
   const handlePersonDelete = (id) => {
-    if (confirm(`Delete ${persons.find(person => person.id === id).name}?`)) {
+    const personName = persons.find(person => person.id === id).name;
+    if (confirm(`Delete ${personName}?`)) {
       deletePerson(id)
-        .then(() => {
+        .then((person) => {
+          if (person.status == 404) {
+            displayNotification(`Information of ${personName} has already been removed from server`)
+            getPersons().then(persons => { setPersons(persons) });
+            return
+          }
           setPersons(persons.filter(person => person.id !== id));
-          setNotificationMessage(`Successfully Deleted ${persons.find(person => person.id === id).name}`)
-          setTimeout(() => {
-            setNotificationMessage(null)
-          }, 5000)
+          displayNotification(`Successfully Deleted ${persons.find(person => person.id === id).name}`)
         });
     }
     return;
   };
-
   const handlePersonUpdate = async () => {
     if (confirm(`${newName.trim()} is already added to phonebook, replace the old number with a new one?`)) {
       const personId = persons.find(person => person.name === newName.trim()).id;
@@ -83,19 +79,27 @@ const App = () => {
         number: newNumber.trim(),
         id: personId
       };
-      updatePerson(updatedPerson).then(person => {
-        setPersons(persons.map(p => p.id === personId ? person : p))
-        setNotificationMessage(`Successfully Updated ${newName.trim()}`)
-        setTimeout(() => {
-          setNotificationMessage(null)
-        }, 5000)
-      })
+      updatePerson(updatedPerson)
+        .then(person => {
+          if (person.status == 404) {
+            displayNotification(`Information of ${newName.trim()} has already been removed from server`)
+            getPersons().then(persons => { setPersons(persons) });
+            return
+          }
+          setPersons(persons.map(p => p.id === personId ? person : p))
+          displayNotification(`Successfully Updated ${newName.trim()}`)
+        })
     }
-  }
+  };
+  const displayNotification = (message) => {
+    setNotificationMessage(message)
+    setTimeout(() => {
+      setNotificationMessage(null)
+    }, 5000)
+  };
   useEffect(() => {
     getPersons().then(persons => { setPersons(persons) });
   }, []);
-
   return (
     <div>
       <h2>Phonebook</h2>
