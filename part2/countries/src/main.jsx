@@ -1,4 +1,5 @@
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
-
-ReactDOM.createRoot(document.getElementById('root')).render(<App />)
+import countriesCopy from '../data.json'
+const countriesList = countriesCopy
+ReactDOM.createRoot(document.getElementById('root')).render(<App countries={countriesList} />)
