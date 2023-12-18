@@ -2,6 +2,8 @@ import ReactDOM from 'react-dom/client'
 import './global.css'
 import countriesJSON from '../data.json'
 
+
+
 const alfabeticalCountries = countriesJSON.sort((a, b) => a.name.common.localeCompare(b.name.common));
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -16,7 +18,7 @@ const routes = Object.keys(pages).map(
             objPath = '/'
         }
         if (objPath == '/country') {
-            objPath = '/country/:id'
+            objPath = '/country/:name'
         }
         return {
             path: objPath,

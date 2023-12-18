@@ -40,9 +40,13 @@ const Home = ({ countries }) => {
     }
     return (
         <section
-            className='container mx-auto'
+            className='container mx-auto h-full'
         >
-            <h1>Countries around the world</h1>
+            <h1
+                className='my-7 text-3xl font-bold text-center uppercase'
+            >
+                Countries around the world
+            </h1>
             <SearchSection handleSearch={handleSearch} />
             <CountiesList countries={displayedCountries} />
         </section>

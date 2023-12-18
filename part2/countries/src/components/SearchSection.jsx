@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types';
 const SearchSection = ({ handleSearch }) => {
   return (
-    <section>
+    <section
+      className="flex gap-2 items-center justify-center w-full h-[11vh]"
+    >
       <h2>Search Country</h2>
       <input
         type="text"
         placeholder="Write your country..."
-        className="border-2 border-gray-400 rounded-md p-2 my-1"
+        className="border-2 border-gray-300 rounded-md p-2 my-1 w-[400px]"
         onChange={(e) => handleSearch(e)}
       />
     </section>

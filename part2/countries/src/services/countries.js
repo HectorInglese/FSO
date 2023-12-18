@@ -10,7 +10,7 @@ const getAllCountries = async () => {
         console.log(error);
     }
 };
-const getCountrieByName = async (name) => {
+const getCountryByName = async (name) => {
     try {
         const response = await axios.get(`${baseUrl}/name/${name}`);
         return response.data;
@@ -18,7 +18,7 @@ const getCountrieByName = async (name) => {
         console.log(error);
     }
 };
-export default {
+export {
     getAllCountries,
-    getCountrieByName
+    getCountryByName
 };
