@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const baseUrl = "https://studies.cs.helsinki.fi/restcountries/api";
+const apiKey = import.meta.env.VITE_MY_VARIABLE;
+const baseUrl = import.meta.env.VITE_COUNTRIES_BASE_URL;
+
 
 const getAllCountries = async () => {
     try {
@@ -18,7 +20,18 @@ const getCountryByName = async (name) => {
         console.log(error);
     }
 };
+
+const getWeather = async (latlng) => {
+    const weatherURL = `https://api.openweathermap.org/data/3.0/onecall?lat=${latlng[0]}&lon=${latlng[1]}&appid=${apiKey}`;
+    try {
+        const response = await axios.get(weatherURL);
+        console.log(response.data);
+    } catch (error) {
+        console.log(error);
+    }
+};
 export {
     getAllCountries,
-    getCountryByName
+    getCountryByName,
+    getWeather
 };
