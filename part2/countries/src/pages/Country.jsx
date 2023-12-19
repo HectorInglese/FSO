@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 const Country = () => {
     const [country, setCountry] = useState({});
     const { name } = useParams();
+    const [weather, setWeather] = useState({});
     useEffect(() => {
         const getCountry = async () => {
             const newCountry = await getCountryByName(name);
@@ -14,7 +15,7 @@ const Country = () => {
     useEffect(() => {
         const getCountryWeather = async () => {
             const countryWeather = await getWeather(country.latlng)
-            console.log(countryWeather);
+            setWeather(countryWeather);
         };
         if (country !== undefined && Object.keys(country).length > 0) {
             getCountryWeather();
@@ -38,6 +39,14 @@ const Country = () => {
                                 src={country.flags.svg}
                                 alt={country.flags.alt}
                             />
+                            {weather !== undefined && Object.keys(weather).length > 0 && (
+                                <>
+                                    <h3>Weather in {country.capital[0]}</h3>
+                                    <p>Temperature: {weather.main.temp}</p>
+                                    <p>Feels like: {weather.main.feels_like}</p>
+                                    <p>its {weather.weather[0].main}</p>
+                                </>
+                            )}
                         </section>
                     )
                     : <h2>Loading...</h2>

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const apiKey = import.meta.env.VITE_MY_VARIABLE;
 const baseUrl = import.meta.env.VITE_COUNTRIES_BASE_URL;
-
+const weatherBaseURL = import.meta.env.VITE_WEATHER_BASE_URL;
 
 const getAllCountries = async () => {
     try {
@@ -22,10 +22,10 @@ const getCountryByName = async (name) => {
 };
 
 const getWeather = async (latlng) => {
-    const weatherURL = `https://api.openweathermap.org/data/3.0/onecall?lat=${latlng[0]}&lon=${latlng[1]}&appid=${apiKey}`;
+    const weatherURL = `${weatherBaseURL}?units=metric&lat=${latlng[0]}&lon=${latlng[1]}&appid=${apiKey}`;
     try {
         const response = await axios.get(weatherURL);
-        console.log(response.data);
+        return (response.data);
     } catch (error) {
         console.log(error);
     }
