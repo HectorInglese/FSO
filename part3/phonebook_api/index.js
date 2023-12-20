@@ -35,19 +35,23 @@ const generateId = () => {
 app.post('/api/persons', (req, res) => {
     const body = req.body;
     const { name, age } = body;
-    if (!name) {
-        return res.status(400).json({
-            error: 'Name is missing in the request'
-        });
-    } else if (!age) {
-        return res.status(400).json({
-            error: 'Age is missing in the request'
-        });
-    } else if (persons.find(person => person.name === name)) {
+    if (!name || !age || persons.find(person => person.name === name)) {
+        if (!name) {
+            return res.status(400).json({
+                error: 'Name is missing in the request'
+            });
+        }
+
+        if (!age) {
+            return res.status(400).json({
+                error: 'Age is missing in the request'
+            });
+        }
+
         return res.status(400).json({
             error: 'Name must be unique'
         });
-    };
+    }
     const newPerson = {
         name: name,
         age: age,
