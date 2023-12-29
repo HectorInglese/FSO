@@ -1,11 +1,16 @@
 const express = require('express');
 const app = express();
-var morgan = require('morgan')
+const morgan = require('morgan')
+const cors = require('cors')
+
 app.use(express.json());
 morgan.token('body', req => {
     return JSON.stringify(req.body)
 })
 app.use(morgan(':method :url :body'))
+
+app.use(cors())
+
 let persons = [
     {
         id: 1,
@@ -65,16 +70,16 @@ app.get('/api/persons/:id', (req, res) => {
 //Ruta POST para agregar una persona
 app.post('/api/persons', (req, res) => {
     const body = req.body;
-    const { name, age } = body;
-    if (!name || !age || persons.find(person => person.name === name)) {
+    const { name, number } = body;
+    if (!name || !number || persons.find(person => person.name === name)) {
         if (!name) {
             return res.status(400).json({
                 error: 'Name is missing in the request'
             });
         }
-        if (!age) {
+        if (!number) {
             return res.status(400).json({
-                error: 'Age is missing in the request'
+                error: 'number is missing in the request'
             });
         }
         return res.status(400).json({
@@ -83,7 +88,7 @@ app.post('/api/persons', (req, res) => {
     };
     const newPerson = {
         name: name,
-        age: age,
+        number: number,
         id: generateId(),
     };
     persons = persons.concat(newPerson);
@@ -94,6 +99,7 @@ app.post('/api/persons', (req, res) => {
 app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id);
     persons = persons.filter(person => person.id !== id);
+    console.log(persons);
     res.status(204).end()
 });
 //PUERTO | RUTA

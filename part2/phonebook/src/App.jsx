@@ -23,7 +23,7 @@ const App = () => {
     setFilter(event.target.value);
   };
   const handlePersonsFilter = () => {
-    return persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
+    return filter === null ? persons : persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
   };
   const handleSubmit = (event) => {
     event.preventDefault()
