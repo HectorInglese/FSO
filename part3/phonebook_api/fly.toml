@@ -1,12 +1,15 @@
-# fly.toml app configuration file generated for phonebook-api-hectoringlese on 2024-01-01T23:34:27-04:00
+# fly.toml app configuration file generated for phonebook-api-hector-inglese on 2024-01-01T23:47:06-04:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "phonebook-api-hectoringlese"
+app = "phonebook-api-hector-inglese"
 primary_region = "mia"
 
 [build]
+
+[env]
+  PORT = "3000"
 
 [http_service]
   internal_port = 3000
