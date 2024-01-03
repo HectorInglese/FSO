@@ -1,6 +1,6 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
 require('dotenv').config({
-    path: '.env.local'
+    path: '.env'
 });
 const uri = `mongodb+srv://hectoringlese:${process.env.MONGO_DB_PASS}@part3.mwpsihu.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
@@ -10,6 +10,10 @@ const client = new MongoClient(uri, {
         deprecationErrors: true,
     }
 });
+console.log(uri);
 client.connect(uri).then(() => {
     console.log('MongoDB connected');
 });
+
+client.close();
+return ;
