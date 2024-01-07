@@ -1,17 +1,13 @@
 const mongoose = require('mongoose');
 require('dotenv').config({
-    path: '.env.local'
+    path: '.env'
 });
-
 const uri = `mongodb+srv://hectoringlese:${process.env.MONGO_DB_PASS}@part3.mwpsihu.mongodb.net/?retryWrites=true&w=majority`;
-
 const personSchema = new mongoose.Schema({
     name: String,
     number: String
 });
-
 const Person = mongoose.model('Person', personSchema);
-
 const getAll = () => {
     Person.find({})
         .then(result => {
@@ -28,7 +24,6 @@ const getAll = () => {
             console.log('close connection');
         });
 };
-
 mongoose.set('strictQuery', false);
 mongoose.connect(uri)
     .then(() => {
