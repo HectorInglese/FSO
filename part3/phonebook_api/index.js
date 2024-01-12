@@ -45,28 +45,22 @@ app.get('/api/persons/:id', async (req, res, next) => {
 // POST route to add a person
 // POST route to add or update a person
 app.post('/api/persons', async (req, res, next) => {
-    const { name, number } = req.body;
-
+    //check if body is empty
+    if (req.body === undefined) {
+        return res.status(400).json({ error: 'Content missing' });
+    }
     // Check if the person's name already exists in the phonebook
-    const existingPerson = await Person.findOne({ name });
-
-    if (existingPerson) {
-        // Update the phone number of the existing entry
-        const updatedPerson = await Person.findByIdAndUpdate(existingPerson.id, { number }, { new: true });
-        res.json(updatedPerson);
-    } else {
-        // Create a new entry
-        const newPerson = new Person({
-            name,
-            number,
-        });
-
-        try {
-            const savedPerson = await newPerson.save();
-            res.json(savedPerson);
-        } catch (error) {
-            next(error);
-        }
+    const { name, number } = req.body;
+    // Create a new entry
+    const newPerson = new Person({
+        name,
+        number,
+    });
+    try {
+        const savedPerson = await newPerson.save();
+        res.json(savedPerson);
+    } catch (error) {
+        next(error);
     }
 });
 
@@ -75,12 +69,18 @@ app.put('/api/persons/:id', async (req, res, next) => {
     const id = req.params.id;
     const { name, number } = req.body;
 
-    try {
-        const updatedPerson = await Person.findByIdAndUpdate(id, { name, number }, { new: true });
-        res.json(updatedPerson);
-    } catch (error) {
-        next(error);
-    }
+    Person.findByIdAndUpdate(
+        id,
+        { name, number },
+        { new: true, runValidators: true, context: 'query' },
+    ).then(
+        (updatedPerson) => {
+            res.json(updatedPerson);
+        }
+    ).catch(error => {
+        console.log()
+        next(error)
+    });
 });
 
 // DELETE route to delete a person
@@ -94,7 +94,6 @@ app.delete('/api/persons/:id', async (req, res, next) => {
         next(error);
     }
 });
-
 // Define error handler middleware
 const errorHandler = (err, req, res, next) => {
     console.error(err);

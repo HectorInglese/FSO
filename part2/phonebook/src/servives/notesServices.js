@@ -1,8 +1,12 @@
 import axios from "axios";
 const baseUrl = '/api';
 export const getPersons = async () => {
-    const response = await axios.get(`${baseUrl}/persons`);
-    return response.data;
+    try {
+        const response = await axios.get(`${baseUrl}/persons`);
+        return response.data;
+    } catch (error) {
+        return (error);
+    }
 };
 export const postPerson = async (person) => {
     const response = await axios.post(`${baseUrl}/persons`, person);
@@ -21,6 +25,6 @@ export const updatePerson = async (person) => {
         const response = await axios.put(`${baseUrl}/persons/${person.id}`, person);
         return response.data;
     } catch (error) {
-        return (error.response);
+        return (error);
     }
 };

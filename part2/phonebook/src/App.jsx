@@ -10,7 +10,7 @@ const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState(null);
   const [newNumber, setNewNumber] = useState(null);
-  const [filter, setFilter] = useState(null);
+  const [filter, setFilter] = useState('');
   const [notificationMessage, setNotificationMessage] = useState(null);
 
   const handleNameChange = (event) => {
@@ -23,7 +23,10 @@ const App = () => {
     setFilter(event.target.value);
   };
   const handlePersonsFilter = () => {
-    return filter === null ? persons : persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
+    if (persons === undefined) {
+      return [];
+    }
+    return persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()));
   };
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -51,6 +54,8 @@ const App = () => {
       .then(person => {
         setPersons(persons.concat(person))
         displayNotification(`Successfully Added ${newName.trim()}`)
+      }).catch((err) => {
+        displayNotification(`Error : ${err.response.data.error}`)
       });
     setNewName('');
     setNewNumber('');
@@ -80,15 +85,15 @@ const App = () => {
         id: personId
       };
       updatePerson(updatedPerson)
-        .then(person => {
-          if (person.status == 404) {
-            displayNotification(`Error : Information of ${newName.trim()} has already been removed from server`)
-            getPersons().then(persons => { setPersons(persons) });
-            return
+        .then(res => {
+          if (res.status === 404) {
+            displayNotification(`Error : La información de ${newName.trim()} ya ha sido eliminada del servidor`);
+          } else if (res.status >= 200 && res.status < 300) {
+            displayNotification(`Actualización exitosa de ${res.name}`);
+          } else {
+            displayNotification(`Error : ${res.response.data.error}`);
           }
-          setPersons(persons.map(p => p.id === personId ? person : p))
-          displayNotification(`Successfully Updated ${newName.trim()}`)
-        })
+        });
     }
   };
   const displayNotification = (message) => {
@@ -98,7 +103,10 @@ const App = () => {
     }, 5000)
   };
   useEffect(() => {
-    getPersons().then(persons => { setPersons(persons) });
+    getPersons()
+      .then(persons => {
+        setPersons(persons)
+      });
   }, []);
   return (
     <div>

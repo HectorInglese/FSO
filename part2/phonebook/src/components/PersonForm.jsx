@@ -8,14 +8,14 @@ const PersonForm = (props) => {
                 <div>
                     name: <input
                         required
-                        value={props.newName}
+                        value={props.newName || ''}
                         onChange={props.handleNameChange}
                     />
                     <br />
                     phone:
                     <input
                         required
-                        value={props.newNumber}
+                        value={props.newNumber || ''}
                         onChange={props.handleNumberChange}
                         type='tel'
                     />
@@ -31,8 +31,8 @@ const PersonForm = (props) => {
 export default PersonForm;
 PersonForm.propTypes = {
     handleSubmit: PropTypes.func.isRequired,
-    newName: PropTypes.string.isRequired,
-    newNumber: PropTypes.string.isRequired,
+    newName: PropTypes.string,
+    newNumber: PropTypes.string,
     handleNameChange: PropTypes.func.isRequired,
     handleNumberChange: PropTypes.func.isRequired
 };
